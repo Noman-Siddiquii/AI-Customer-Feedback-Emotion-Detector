@@ -1,3 +1,7 @@
+"""
+Flask application to expose emotion detection service.
+"""
+
 from flask import Flask, request, render_template
 from EmotionDetection.emotion_detection import emotion_detector
 
@@ -5,10 +9,16 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
+    """
+    Renders the homepage.
+    """
     return render_template("index.html")
 
 @app.route("/emotionDetector")
 def emotion_detector_route():
+    """
+    Endpoint to handle emotion detection from user input.
+    """
     text_to_analyze = request.args.get('textToAnalyze')
 
     result = emotion_detector(text_to_analyze)

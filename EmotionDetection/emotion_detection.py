@@ -1,12 +1,21 @@
+"""
+This module uses Watson NLP cloud service to detect emotions in text.
+"""
+
 import requests
-import json
 
 def emotion_detector(text_to_analyze):
-    import requests
+    """
+    Analyzes emotions in the given text using Watson NLP API.
 
-def emotion_detector(text_to_analyze):
+    Parameters:
+        text_to_analyze (str): Text input from the user.
+
+    Returns:
+        dict: Dictionary containing scores for anger, disgust, fear, joy, sadness,
+              and the dominant emotion.
+    """
     if not text_to_analyze:
-        # Blank input handling
         return {
             'anger': None,
             'disgust': None,
@@ -16,11 +25,18 @@ def emotion_detector(text_to_analyze):
             'dominant_emotion': None
         }
 
-    url = "https://sn-watson-emotion.labs.cognitiveclass.ai/emotion"
-    params = {"text": text_to_analyze}
-    response = requests.get(url, params=params)
+    url = "https://sn-watson-emotion.labs.skills.network/v1/watson.runtime.nlp.v1/NlpService/EmotionPredict"
+    headers = {"Content-Type": "application/json",
+               "grpc-metadata-mm-model-id": "emotion_aggregated-workflow_lang_en_stock"}
+    payload = {
+        "raw_document": {
+            "text": text_to_analyze
+        }
+    }
 
-    if response.status_code == 400:
+    response = requests.post(url, headers=headers, json=payload, timeout=10)
+
+    if response.status_code != 200:
         return {
             'anger': None,
             'disgust': None,
@@ -30,9 +46,8 @@ def emotion_detector(text_to_analyze):
             'dominant_emotion': None
         }
 
-    response_data = response.json()
-    emotions = response_data["emotion"]
-
+    data = response.json()
+    emotions = data["emotionPredictions"][0]["emotion"]
     dominant_emotion = max(emotions, key=emotions.get)
 
     return {
@@ -43,4 +58,3 @@ def emotion_detector(text_to_analyze):
         'sadness': emotions['sadness'],
         'dominant_emotion': dominant_emotion
     }
-
