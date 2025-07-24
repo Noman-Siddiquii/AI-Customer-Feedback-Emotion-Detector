@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, render_template
 from EmotionDetection.emotion_detection import emotion_detector
 
 app = Flask(__name__)
@@ -10,15 +10,12 @@ def index():
 @app.route("/emotionDetector")
 def emotion_detector_route():
     text_to_analyze = request.args.get('textToAnalyze')
-    
-    if not text_to_analyze:
-        return "Please provide text to analyze", 400
-    
+
     result = emotion_detector(text_to_analyze)
-    
-    if result is None:
-        return "Error occurred in emotion detection", 500
-    
+
+    if result['dominant_emotion'] is None:
+        return "Invalid text! Please try again!"
+
     formatted_response = (
         f"For the given statement, the system response is "
         f"'anger': {result['anger']}, "
