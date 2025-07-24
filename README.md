@@ -4,7 +4,7 @@ This project uses IBM Watson NLP's emotion detection API to analyze the emotions
 
 ---
 
-## 🔍 Features
+##  Features
 
 - Input text through a web interface.
 - Detect emotions: **anger**, **disgust**, **fear**, **joy**, **sadness**.
@@ -14,7 +14,7 @@ This project uses IBM Watson NLP's emotion detection API to analyze the emotions
 
 ---
 
-## 🛠️ Project Structure
+##  Project Structure
 
 ```bash
 AI-Customer-Feedback-Emotion-Detector/
